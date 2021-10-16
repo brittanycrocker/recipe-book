@@ -11,7 +11,7 @@ const FormTemplate = () => {
                email,
                 password
               })
-              if (user) console.log('user', user)
+              if (user) localStorage.setItem('userId', user.id)
               if (error) {
                 console.log('error', error)
                 // snackbar
