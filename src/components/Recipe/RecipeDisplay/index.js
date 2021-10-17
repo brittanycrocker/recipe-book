@@ -9,67 +9,46 @@ const { Title } = Typography
 
 const Recipe = () => {
     const location = useLocation()
-    const myparam = location.state
-    console.log(myparam.recipeId)
+    const [recipeId, setRecipeId] = useState(location.state.recipeId)
+    const [data, setData] = useState()
+
+    const user = supabase.auth.user()
+
+
+
+    console.log(localStorage.getItem('supabase.auth.token'))
 
     const fetchRecipe = async () => {
         let { data: recipe, error } = await supabase
         .from('recipe')
         .select('*')
-        .eq('id', myparam.recipeId)
-        if (recipe) console.log('recipe', recipe)
+        .eq('userId', user.id)
+        .eq('id', recipeId)
+        if (recipe) setData(recipe[0])
+        if (error) console.log('an error occured', error)
     }
 
-    const memoizedRecipeData = useMemo(fetchRecipe, myparam)
-
-    memoizedRecipeData.then((res) => console.log('res', res))
-
-
+    useEffect(() => {
+        fetchRecipe()
+    })
     
     // TODO: add option to filter recipes
     return (
         <div>
             <Container>
             <Title></Title>
-            <RecipeContent />
+            <RecipeContent data={data} />
        </Container>
         </div>
     )
 }
 
-const RecipeContent = () => {
-    const [name, setName] = useState()
-    const[serves, setServes] = useState()
-    let [ingredients, setIngredients] = useState()
-    const [cookingTime, setCookingTime] = useState()
-    const [mealType, setMealType] = useState()
-    let [directions, setDirections] = useState()
+const RecipeContent = ({data}) => {
+    console.log('data', data)
+    const {name, serves, cookingTime, mealType, ingredients, directions} = data || {}
 
     const history = useHistory()
-    useEffect(() => {
-        const userId = localStorage.getItem('userId')
-        console.log('userID', userId)
-        if (userId) fetchRecipes(userId)
-    }, [])
-
-const fetchRecipes = async (userId) => {
-    let { data: recipe, error } = await supabase
-        .from('recipe')
-        .select('*')
-        if (recipe) {
-            console.log('recipe', recipe)
-            const {name, serves, cookingTime, mealType, ingredients, directions} = recipe[0]
-            setName(name)
-            setServes(serves)
-            setCookingTime(cookingTime)
-            setMealType(mealType)
-            setIngredients(ingredients)
-            setDirections(directions)
-            console.log(recipe)
-        }
-        if (error) return console.log(error)
-}
-   console.log(cookingTime)
+    
     return (
             <Container>
                 <div onClick={() => history.push({pathname: '/home'})}>

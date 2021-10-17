@@ -50,7 +50,7 @@ const Table = ({columns, data}) => {
               {rows.map(row => {
                 prepareRow(row)
                 return (
-                  <tr {...row.getRowProps()} onClick={() => handleClick(row.original.id)}>
+                  <tr {...row.getRowProps()} onClick={() => {handleClick(row.original.id); console.log('row', row)}}>
                     {row.cells.map(cell => {
                       return (
                         <td
