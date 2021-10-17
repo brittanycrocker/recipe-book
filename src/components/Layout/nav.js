@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory, useLocation  } from "react-router-dom"
-import { Menu } from 'antd';
+import { supabase } from '../../supabase'
+import { Menu, Space } from 'antd';
 import { MailOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons'
 import * as ROUTES from '../../routes/constants'
 const { SubMenu } = Menu;
@@ -9,50 +10,78 @@ const { SubMenu } = Menu;
 const Nav = () => {
     // TODO: set inital route to loction.param
     const [route, setRoute] = useState()
+    const [user, setUser] = useState(localStorage.getItem('supabase.auth.token'))
 
     const history = useHistory()
-    // const location = useLocation()
+    const location = useLocation()
 
-    // console.log('location', location)
+    console.log('location', location)
 
-    useEffect(() => {
-        // history.push({
-        //     pathname: `/${route}`,
-        //     // search: '?query=abc',
-        // });
-    }, [setRoute])
+    // useEffect(() => {
+    //     history.push({
+    //         pathname: `/collection`,
+    //     });
+    // }, [setRoute, history, route])
 
     const handleClick = (e) => {
-        setRoute(e.key)
+      history.push({
+        pathname: `${e.key}`,
+    });
     }
 
     // to do, loggedin menu, logged outmenu
+
+    const withUser = [
+      {
+        display: 'Home',
+        route: ROUTES.LANDING
+      },
+      {
+        display: 'Collection',
+        route: ROUTES.COLLECTION
+      },
+      {
+        display: 'Add Recipe',
+        route: ROUTES.CREATE_RECIPE
+      }
+    ]
+
+    const withoutUser = [
+      {
+        display: 'Home',
+        route: ROUTES.HOME
+      }
+    ]
+
+
     return (
         <Menu onClick={handleClick} selectedKeys={[route]} mode="horizontal">
-        <Menu.Item key={ROUTES.HOME} icon={<MailOutlined />}>
-          Home
-        </Menu.Item>
-        <Menu.Item key={ROUTES.COLLECTION} icon={<AppstoreOutlined />}>
-          Collection
-        </Menu.Item>
-        <Menu.Item key={ROUTES.CERATE_RECIPE} icon={<AppstoreOutlined />}>
-          Add Recipe
-        </Menu.Item>
-        <SubMenu key="SubMenu" icon={<SettingOutlined />} title="Account">
-          <Menu.ItemGroup title="Item 1">
-            <Menu.Item key="setting:1">Option 1</Menu.Item>
-            <Menu.Item key="setting:2">Option 2</Menu.Item>
-          </Menu.ItemGroup>
-          <Menu.ItemGroup title="Item 2">
-            <Menu.Item key="setting:3">Option 3</Menu.Item>
-            <Menu.Item key="setting:4">Option 4</Menu.Item>
-          </Menu.ItemGroup>
-        </SubMenu>
-        <Menu.Item key="alipay">
-          <a href="https://ant.design" target="_blank" rel="noopener noreferrer">
-            Navigation Four - Link
-          </a>
-        </Menu.Item>
+          {/* <div> */}
+          {user 
+          ? Object.values(withUser).map((ele) => {
+            return (
+              <Menu.Item key={ele.route} icon={<MailOutlined />}>
+              {ele.display}
+            </Menu.Item>
+            )
+ 
+          })
+          : Object.values(withoutUser).map((ele) => {
+              return (
+                <>
+                <Menu.Item key={ele.route} icon={<MailOutlined />}>
+                {ele.display}
+              </Menu.Item>
+            </>
+              )
+          })
+        }
+         <SubMenu key="SubMenu" icon={<SettingOutlined />} title="Account">
+                {user ?  <Menu.Item onClick={() => {supabase.auth.signOut(); history.push('/')}} key={ROUTES.LANDING}>Logout</Menu.Item>
+                      : ( <><Menu.Item key={ROUTES.LOGIN}>Login</Menu.Item>
+                          <Menu.Item key={ROUTES.SIGN_UP}>Sign up</Menu.Item></> )  
+                }
+          </SubMenu>
       </Menu>
     );
 };

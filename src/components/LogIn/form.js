@@ -2,10 +2,13 @@ import React, { useState } from 'react'
 import { supabase } from '../../supabase'
 import {  Form, Input, Button, Checkbox  } from 'antd'
 import { useHistory } from "react-router-dom";
+import * as ROUTES from '../../routes/constants'
 
 const FormTemplate = () => {
   const [email, setEmail] = useState('brittanylcrocker@gmail.com')
   const [password, setPassword] = useState('chicken')
+
+  console.log(ROUTES.COLLECTION)
 
   const history = useHistory()
     const auth = async (type) => {
@@ -18,7 +21,9 @@ const FormTemplate = () => {
               if (user) {
                 localStorage.setItem('userId', user.id) 
                 console.log(user)
-                history.push('/home')
+                history.push({
+                  pathname: ROUTES.COLLECTION
+                })
               }
               if (error) {
                 console.log('error', error)

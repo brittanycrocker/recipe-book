@@ -1,14 +1,13 @@
 import React from 'react';
-import FormTemplate from '../../components/LogIn/form'
-import AddRecipe from '../../components/Recipe/AddRecipe'
+import Layout from '../../components/Layout'
 import { supabase } from '../../supabase'
 
 const Home = () => {
     const user = supabase.auth.user()
     return (
-        <div>Home
-        <AddRecipe />
-        </div>
+        <Layout>
+            Home
+        </Layout>
     ) 
     // : ( <FormTemplate> </FormTemplate> )
 

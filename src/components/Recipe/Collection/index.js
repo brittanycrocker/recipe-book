@@ -68,6 +68,7 @@ const Collection = () => {
             data={data}
           /> 
         : <div>Loading</div>
+    
         }
       </Layout>
     )

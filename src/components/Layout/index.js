@@ -5,13 +5,13 @@ const { Header, Content, Footer } = Layout;
 
 const ScreenLayout = ({children}) => {
     return (
-        <Layout className="layout">
+        <Layout>
         <Header>
-          <div className="logo" />
+          <div />
           <Nav />
         </Header>
-        <Content style={{ padding: '0 50px' }}>
-          <div className="site-layout-content">{children}</div>
+        <Content style={{ padding: '50px 50px' }}>
+          <div>{children}</div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>Created by Brittany Crocker</Footer>
       </Layout>

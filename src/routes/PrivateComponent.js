@@ -25,7 +25,7 @@ export default function PrivateComponent ({children, ...props}) {
 
       if (token) { return children }
   return (
-    <Redirect to={ROUTES.LOG_IN} />
+    <Redirect to={ROUTES.LOGIN} />
   )
 
 }

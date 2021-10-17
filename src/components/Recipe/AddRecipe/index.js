@@ -64,7 +64,7 @@ const AddRecipeContent = () => {
 
           
    
-          const { data, error } = await supabase
+        const { data, error } = await supabase
         .from('recipe')
         .insert([
             { name, userId, serves, cookingTime, mealType, ingredients, directions }
@@ -73,8 +73,6 @@ const AddRecipeContent = () => {
         if (error) console.log('error', error)
           console.log('payload', {serves, cookingTime, mealType, ingredients, directions},{ ingredients: ingredients.trim()})
       }
-
-
     const menu = (
         <Menu onClick={handleMenuClick}>
           <Menu.Item key="Breakfast" icon={<UserOutlined />}>
