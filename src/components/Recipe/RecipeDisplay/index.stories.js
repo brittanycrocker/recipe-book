@@ -1,11 +1,11 @@
 import React from 'react'
-import Collection from './index'
+import RecipeDisplay from './index'
 
 export default {
-    title: 'Recipe/Collection',
-    component: Collection
+    title: 'Recipe/RecipeDisplay',
+    component: RecipeDisplay
 }
 
-const Template = () => <Collection />
+const Template = () => <RecipeDisplay />
 
 export const Default = Template.bind({})

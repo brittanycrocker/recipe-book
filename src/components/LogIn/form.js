@@ -1,21 +1,44 @@
 import React, { useState } from 'react'
 import { supabase } from '../../supabase'
 import {  Form, Input, Button, Checkbox  } from 'antd'
+import { useHistory } from "react-router-dom";
 
 const FormTemplate = () => {
-  const [email, setEmail] = useState()
-  const [password, setPassword] = useState()
-    const auth = async () => {
-        
-            let { user, error } = await supabase.auth.signUp({
+  const [email, setEmail] = useState('brittanylcrocker@gmail.com')
+  const [password, setPassword] = useState('chicken')
+
+  const history = useHistory()
+    const auth = async (type) => {
+      console.log(type)
+          if (type === 'signin') {
+            let { user, error } = await supabase.auth.signIn({
                email,
                 password
               })
-              if (user) localStorage.setItem('userId', user.id)
+              if (user) {
+                localStorage.setItem('userId', user.id) 
+                console.log(user)
+                history.push('/home')
+              }
               if (error) {
                 console.log('error', error)
                 // snackbar
               }
+            } else if (type === 'signup') {
+            let { user, error } = await supabase.auth.signUp({
+               email,
+                password
+              })
+              if (user) {
+                localStorage.setItem('userId', user.id) 
+                console.log(user)
+                history.push('/home')
+              }
+              if (error) {
+                console.log('error', error)
+                // snackbar
+              }
+            }
         
     }
 
@@ -31,7 +54,7 @@ const FormTemplate = () => {
         initialValues={{
           remember: true,
         }}
-        onFinish={() => auth('signup')}
+        onFinish={() => auth('signin')}
         // onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
