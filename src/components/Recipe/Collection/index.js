@@ -3,6 +3,7 @@ import { supabase } from '../../../supabase'
 import { useTable } from 'react-table'
 import Table from './table'
 import { useHistory } from "react-router-dom";
+import Layout from '../../Layout'
 
 
 const Collection = () => {
@@ -58,15 +59,17 @@ const Collection = () => {
     // const memoizedRecipes = useMemo(fetchRecipes, [userId])
 
     
-    return  data? (
-        <Table 
+    return  (
+      <Layout>
+        { data 
+        ?  <Table 
             onClick={() => onClick()}
             columns={columns}
             data={data}
-        />
-    ) 
-    : (
-        <div>Loading</div>
+          /> 
+        : <div>Loading</div>
+        }
+      </Layout>
     )
 };
 

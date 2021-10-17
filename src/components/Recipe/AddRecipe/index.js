@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { supabase } from '../../../supabase'
-import { Layout, Menu, Breadcrumb, Dropdown, Button, message, Typography , Input } from 'antd';
+import { Menu, Breadcrumb, Dropdown, Button, message, Typography , Input } from 'antd';
 import { Container, TitleInput, ContentContainer, InputContainer, Section } from './index.styles'
 import { EditOutlined, UserOutlined, DownOutlined, } from '@ant-design/icons'
+import Layout from '../../Layout'
 const { Header, Content, Footer } = Layout
 const { TextArea } = Input
 const { Title } = Typography
@@ -152,9 +153,11 @@ const AddRecipeContent = () => {
 
 const AddRecipe = () => { 
     return (
+      <Layout>
        <Container>
             <AddRecipeContent />
        </Container>
+       </Layout>
     )
 }
 
