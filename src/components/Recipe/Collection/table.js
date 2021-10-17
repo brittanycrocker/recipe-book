@@ -2,8 +2,12 @@ import React, {  useState, useEffect, useMemo } from 'react'
 import { useHistory } from "react-router-dom";
 import { supabase } from '../../../supabase'
 import { useTable } from 'react-table'
+import { Styles, StyledTr } from './index.styles'
+import { blue } from '@ant-design/colors';
 
 const Table = ({columns, data}) => {
+
+  // TODO: add sorting filter to table
 
     const history = useHistory()
 
@@ -11,11 +15,30 @@ const Table = ({columns, data}) => {
         console.log('uuid', id)
         history.push({
             pathname: '/recipe',
-            // search: '?query=abc',
             state: {
                 recipeId: id
             }
         });
+    }
+
+    const formatCell = (cell) => {
+      let Content = cell.value
+  
+      if (cell.column.Header === 'Cooking Time') {
+        return (
+          <span>
+            {Content + ' minutes'}
+          </span>
+        )
+      } else if (cell.column.Header === 'Name') {
+        return (
+          <span style={{ fontWeight: 600 }}>
+            {Content}
+          </span>
+        )
+      } else {
+        return Content
+      }
     }
 
     const {
@@ -26,19 +49,14 @@ const Table = ({columns, data}) => {
         prepareRow,
       } = useTable({ columns, data })
     return (
-            <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
+      <Styles>
+            <table {...getTableProps()}>
             <thead>
               {headerGroups.map(headerGroup => (
                 <tr {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map(column => (
                     <th
                       {...column.getHeaderProps()}
-                      style={{
-                        borderBottom: 'solid 3px red',
-                        background: 'aliceblue',
-                        color: 'black',
-                        fontWeight: 'bold',
-                      }}
                     >
                       {column.render('Header')}
                     </th>
@@ -50,26 +68,23 @@ const Table = ({columns, data}) => {
               {rows.map(row => {
                 prepareRow(row)
                 return (
-                  <tr {...row.getRowProps()} onClick={() => {handleClick(row.original.id); console.log('row', row)}}>
+                  <StyledTr {...row.getRowProps()} onClick={() => {handleClick(row.original.id); console.log('row', row)}}>
                     {row.cells.map(cell => {
+                      console.log('cell', cell)
                       return (
                         <td
                           {...cell.getCellProps()}
-                          style={{
-                            padding: '10px',
-                            border: 'solid 1px gray',
-                            background: 'papayawhip',
-                          }}
                         >
-                          {cell.render('Cell')}
+                         {formatCell(cell)}
                         </td>
                       )
                     })}
-                  </tr>
+                  </StyledTr>
                 )
               })}
             </tbody>
           </table>
+          </Styles>
     );
 };
 

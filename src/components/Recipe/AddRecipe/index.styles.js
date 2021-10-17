@@ -1,4 +1,7 @@
 import styled from 'styled-components'
+import { blue } from '@ant-design/colors';
+import { Menu, Breadcrumb, Dropdown, Button, message, Typography , Input } from 'antd';
+const { Title } = Typography
 
 export const Container = styled.div`
     width: 100%;
@@ -12,11 +15,11 @@ export const Container = styled.div`
     row-gap: 200px;
     flex-wrap: wrap;
 `
-export const Title = styled.div`
-    font-weight: 800;
-    font-size: 31px;
-    margin-bottom: 58px;
-`
+// export const Title = styled.div`
+//     font-weight: 800;
+//     font-size: 31px;
+//     margin-bottom: 58px;
+// `
 
 export const TitleInput = styled.input`
     text-align: center;
@@ -37,6 +40,7 @@ export const TitleInput = styled.input`
 `
 
 export const ContentContainer = styled.div`
+    color: white;
     @media screen {min-device-width: 1200px} {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -45,7 +49,9 @@ export const ContentContainer = styled.div`
 `
 
 export const Section = styled.div`
-    background: green;
+    background: RGBA(0,58,140,.8);
+    border-radius: 2%;
+    color: white;
     padding: 20px;
     @media screen {min-device-width: 1200px} {
         width: 500px;
@@ -53,4 +59,8 @@ export const Section = styled.div`
 `
 export const InputContainer = styled.div`
     padding: 5px;
+`
+
+export const TitleContainer = styled(Title)`
+    color: white;
 `

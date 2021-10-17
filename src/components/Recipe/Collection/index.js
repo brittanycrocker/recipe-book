@@ -25,8 +25,6 @@ const Collection = () => {
             if (error) return console.log(error)
     }
 
-    console.log(data)
-
     const columns = React.useMemo(
         () => [
           {

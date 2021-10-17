@@ -5,6 +5,8 @@ import { Layout, Menu, Breadcrumb, Dropdown, Button, message, Typography , Input
 import { EditOutlined, UserOutlined, DownOutlined, } from '@ant-design/icons'
 import {supabase} from '../../../supabase'
 import { useHistory, useLocation } from "react-router-dom";
+import { Descriptions } from 'antd';
+import Paragraph from 'antd/lib/skeleton/Paragraph';
 const { Title } = Typography
 
 const Recipe = () => {
@@ -48,6 +50,13 @@ const RecipeContent = ({data}) => {
     const {name, serves, cookingTime, mealType, ingredients, directions} = data || {}
 
     const history = useHistory()
+
+    const styles = {
+        // border: '1px solid black', 
+        // padding: '5px',
+        borderRadius: '1%',
+        color: 'white'
+    }
     
     return (
             <Container>
@@ -56,23 +65,35 @@ const RecipeContent = ({data}) => {
                 </div>
             <ContentContainer>
             <Section>
-                <InputContainer>
-                <Title level={4}>Serves: {serves}</Title>
-                </InputContainer>
-                <InputContainer>
-                    Cooking time: {cookingTime}
-                    </InputContainer>
-                <InputContainer>
-                  
-                </InputContainer>
-                <InputContainer>
-                </InputContainer>
+            <Descriptions
+                labelStyle={{background: 'RGBA(0,58,140,1)', fontWeight: '600'}}
+                    
+                    bordered
+                    column={{  sm: 1, xs: 1 }}
+                    >
+            
+                <Descriptions.Item  style={styles}label="Serves">{serves}</Descriptions.Item>
+                <Descriptions.Item style={styles} label="Product"> serves    </Descriptions.Item>
+
+                
+                <Descriptions.Item style={styles} label="Product">Cooking Time: {cookingTime} </Descriptions.Item>
+                    
+                
+                <Descriptions.Item style={styles} label="Product">Meal Type: {mealType} </Descriptions.Item>
+                
+                
+                {console.log(ingredients)}
+                <Title>Ingredients</Title>
+                <Paragraph style={{ whiteSpace: 'pre-wrap', ...styles}}>{ingredients}</Paragraph>
+                
+                
+                
+            </Descriptions>
             </Section>
             <Section>
-                <InputContainer style={{}}><Title level={4}>Directions</Title></InputContainer>
-                <InputContainer>
-                    
-                </InputContainer> 
+           
+            <InputContainer style={styles}><Title level={4}>Directions</Title><div>{directions}</div></InputContainer>
+        
             </Section>
         </ContentContainer>
         </Container>
