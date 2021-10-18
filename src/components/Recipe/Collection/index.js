@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { supabase } from "../../../supabase";
 import { useHistory } from "react-router-dom";
-import { useFetch } from '../utils'
+import { useFetchRecipes } from '../utils'
 import { useTable } from "react-table";
 import Table from "./table";
 import Layout from "../../Layout";
@@ -12,7 +12,8 @@ const Collection = () => {
   const [data, setData] = useState();
 
   useEffect(() => {
-    setData(fetchRecipes())
+    const recipes = useFetchRecipes
+    setData(recipes)
   }, []);
 
 
