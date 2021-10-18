@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { supabase } from "../../../supabase";
 import { useHistory } from "react-router-dom";
-import { fetchRecipes } from '../utils'
+import { useFetch } from '../utils'
 import { useTable } from "react-table";
 import Table from "./table";
 import Layout from "../../Layout";
