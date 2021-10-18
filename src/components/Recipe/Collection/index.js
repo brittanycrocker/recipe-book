@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { supabase } from "../../../supabase";
+import { useHistory } from "react-router-dom";
+import { fetchRecipes } from '../utils'
 import { useTable } from "react-table";
 import Table from "./table";
-import { useHistory } from "react-router-dom";
 import Layout from "../../Layout";
 import { Typography } from "antd";
 const { Title } = Typography;
@@ -11,18 +12,10 @@ const Collection = () => {
   const [data, setData] = useState();
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
-    if (userId) fetchRecipes(userId);
+    setData(fetchRecipes())
   }, []);
 
-  const fetchRecipes = async (userId) => {
-    let { data: recipe, error } = await supabase
-      .from("recipe")
-      .select("*")
-      .eq("userId", userId);
-    if (recipe) setData(recipe);
-    if (error) return console.log(error);
-  };
+
 
   const columns = React.useMemo(
     () => [
