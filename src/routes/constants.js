@@ -1,9 +1,8 @@
-export const LANDING = '/'
-export const HOME = '/home'
-export const SIGN_UP = '/signup'
-export const LOGIN = '/login'
-export const LOGOUT = '/logout'
-export const COLLECTION = '/collection'
-export const CREATE_RECIPE = '/create'
-export const RECIPE = '/recipe'
-export const PASSWORD_FORGET = '/resetpw'
+export const HOME = "/";
+export const SIGN_UP = "/signup";
+export const LOGIN = "/login";
+export const LOGOUT = "/logout";
+export const COLLECTION = "/collection";
+export const CREATE_RECIPE = "/create";
+export const RECIPE = "/recipe";
+export const PASSWORD_FORGET = "/resetpw";

@@ -1,11 +1,11 @@
-import React from 'react'
-import Collection from './index'
+import React from "react";
+import Collection from "./index";
 
 export default {
-    title: 'Recipe/Collection',
-    component: Collection
-}
+  title: "Recipe/Collection",
+  component: Collection,
+};
 
-const Template = () => <Collection />
+const Template = () => <Collection />;
 
-export const Default = Template.bind({})
+export const Default = Template.bind({});

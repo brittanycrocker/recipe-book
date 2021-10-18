@@ -1,11 +1,11 @@
-import React from 'react'
-import Layout from './index'
+import React from "react";
+import Layout from "./index";
 
 export default {
-    title: 'Layout',
-    component: Layout
-}
+  title: "Layout",
+  component: Layout,
+};
 
-const Template = (args) => <Layout {...args} />
+const Template = (args) => <Layout {...args} />;
 
-export const Primary = Template.bind({})
+export const Primary = Template.bind({});

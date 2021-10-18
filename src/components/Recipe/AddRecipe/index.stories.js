@@ -1,11 +1,11 @@
-import React from 'react'
-import AddRecipe from './index'
+import React from "react";
+import AddRecipe from "./index";
 
 export default {
-    title: 'Recipe/AddRecipe',
-    component: AddRecipe
-}
+  title: "Recipe/AddRecipe",
+  component: AddRecipe,
+};
 
-const Template = () => <AddRecipe />
+const Template = () => <AddRecipe />;
 
-export const Default = Template.bind({})
+export const Default = Template.bind({});
