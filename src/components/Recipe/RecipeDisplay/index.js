@@ -7,10 +7,12 @@ import {
   InputContainer,
   Section,
 } from "../AddRecipe/index.styles";
-import { Typography } from "antd";
+import { Typography, Button, Tooltip, message, Modal } from "antd";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { supabase } from "../../../supabase";
 import { useHistory, useLocation } from "react-router-dom";
 import { Descriptions } from "antd";
+import * as ROUTES from "../../../routes/constants";
 const { Title, Paragraph } = Typography;
 
 const Recipe = () => {
@@ -39,17 +41,41 @@ const Recipe = () => {
     <Layout>
       <Container>
         {/* <Title>{data?.name}</Title> */}
-        <RecipeContent data={data} />
+        <RecipeContent data={data} user={user} />
       </Container>
     </Layout>
   );
 };
 
-const RecipeContent = ({ data }) => {
+const RecipeContent = ({ data, user }) => {
   const { name, serves, cookingTime, mealType, ingredients, directions } =
     data || {};
 
   const history = useHistory();
+
+  const handleClick = () => {
+    console.log(data.id);
+    history.push({
+      pathname: ROUTES.UPDATE_RECIPE,
+      state: {
+        recipeId: data.id,
+      },
+    });
+  };
+
+  const deleteRecipe = async () => {
+    let { data: recipe, error } = await supabase
+      .from("recipe")
+      .delete("*")
+      .eq("userId", user.id)
+      .eq("id", data.id);
+    if (recipe) message.info("Recipe successfully deleted");
+    if (error) message.info("Error deleting recipe", error);
+  };
+
+  const handleDelete = () => {
+    deleteRecipe();
+  };
 
   const styles = {
     // border: '1px solid black',
@@ -61,7 +87,36 @@ const RecipeContent = ({ data }) => {
 
   return (
     <Container>
-      <Title>{data?.name}</Title>
+      <Title>{name}</Title>
+      <div
+        style={{ display: "flex", justifyContent: "end", paddingBottom: "5px" }}
+      >
+        <div style={{ padding: "5px" }}>
+          <Tooltip title="update">
+            <Button
+              onClick={() => handleClick()}
+              title="update recipe"
+              type="primary"
+              shape="circle"
+              icon={<EditOutlined />}
+              size={"large"}
+            />
+          </Tooltip>
+        </div>
+        <div style={{ padding: "5px" }}>
+          <Tooltip title="delete">
+            <Button
+              onClick={info}
+              onOk={() => handleDelete()}
+              title="update recipe"
+              type="primary"
+              shape="circle"
+              icon={<DeleteOutlined />}
+              size={"large"}
+            />
+          </Tooltip>
+        </div>
+      </div>
       <ContentContainer>
         <Section>
           <Descriptions
@@ -109,5 +164,18 @@ const RecipeContent = ({ data }) => {
     </Container>
   );
 };
+
+function info() {
+  Modal.info({
+    title: "This is a notification message",
+    content: (
+      <div>
+        <p>some messages...some messages...</p>
+        <p>some messages...some messages...</p>
+      </div>
+    ),
+    onOk() {},
+  });
+}
 
 export default Recipe;

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useHistory, useLocation } from "react-router-dom";
 import { supabase } from "../../../supabase";
 import {
   Menu,
@@ -17,48 +18,44 @@ import {
   Section,
 } from "./index.styles";
 import {
-  EditOutlined,
   UserOutlined,
-  DownOutlined,
   ClockCircleOutlined,
 } from "@ant-design/icons";
 import Layout from "../../Layout";
-import { Descriptions } from "antd";
-const { Header, Content, Footer } = Layout;
 const { TextArea } = Input;
 const { Title } = Typography;
 
-const UpdateRecipeContent = () => {
-  //TODO: form validation
-  const [name, setName] = useState("");
-  const [serves, setServes] = useState("");
-  let [ingredients, setIngredients] = useState("");
-  const [cookingTime, setCookingTime] = useState("");
-  const [mealType, setMealType] = useState("");
-  let [directions, setDirections] = useState("");
+const UpdateRecipeContent = ({data}) => {
+    //TODO: form validation
+    const [name, setName] = useState("");
+    const [serves, setServes] = useState("");
+    let [ingredients, setIngredients] = useState("");
+    const [cookingTime, setCookingTime] = useState("");
+    const [mealType, setMealType] = useState("");
+    let [directions, setDirections] = useState("");
 
   const userId = supabase.auth.user().id;
 
-  const handleSubmit = async () => {
+  const formatRecipe = () => { 
     let formattedIngredients = ingredients.replace(/[\r\n]{2,}/g, "\n");
-    let ingredientsArr = [];
-    formattedIngredients.split("\n").forEach((x) => {
-      if (x !== null) {
-        ingredientsArr.push(x.trim());
-      }
-    });
-
-    let formattedDirections = directions.replace(/[\r\n]{2,}/g, "\n");
-    let directionsArr = [];
-    formattedDirections.split("\n").forEach((x) => {
-      if (x !== null) {
-        directionsArr.push(x.trim());
-      }
-    });
-
-    setIngredients(ingredientsArr.join("\n"));
-    setDirections(directionsArr.join("\n"));
-
+     let ingredientsArr = [];
+     formattedIngredients.split("\n").forEach((x) => {
+       if (x !== null) {
+         ingredientsArr.push(x.trim());
+       }
+     });
+     let formattedDirections = directions.replace(/[\r\n]{2,}/g, "\n");
+     let directionsArr = [];
+     formattedDirections.split("\n").forEach((x) => {
+       if (x !== null) {
+         directionsArr.push(x.trim());
+       }
+     });
+     setIngredients(ingredientsArr.join("\n"));
+     setDirections(directionsArr.join("\n"));
+   }
+  
+   const saveRecipe = async () => {
     const { data, error } = await supabase
       .from("recipe")
       .insert([
@@ -82,8 +79,13 @@ const UpdateRecipeContent = () => {
       setDirections("");
     }
     if (error) message.info("Error saving recipe");
+  }
+  
+  const handleSubmit = () => {
+    formatRecipe()
+    saveRecipe()
   };
-
+  
   const mealTypeList = ["Breakfast", "Main", "Dessert", "Snack"];
 
   const menu = (
@@ -106,22 +108,22 @@ const UpdateRecipeContent = () => {
     borderRadius: "1%",
   };
 
-  return (
+  return data ? (
     <Container>
-      <Title level={2}>Add a favourite to the collection</Title>
+      <Title level={2}>Update Recipe</Title>
       <div
         style={{ textAlign: "center", paddingBottom: "20px", height: "60px" }}
       >
-        <Title editable={{ onChange: setName }}>{name}</Title>
+        <Title editable={{ onChange: setName }}>{name || data.name}</Title>
       </div>
       <div>
-        <ContentContainer>
-          <Section>
+        <ContentContainer>         
+           <Section>
             <InputContainer>
               <Input
                 addonBefore={<UserOutlined className="site-form-item-icon" />}
                 placeholder="servings"
-                value={serves}
+                value={serves || data.serves}
                 style={inputStyle}
                 onChange={(e) => setServes(e.target.value)}
               />
@@ -129,15 +131,15 @@ const UpdateRecipeContent = () => {
             <InputContainer>
               <Input
                 addonBefore={<ClockCircleOutlined />}
-                placeholder="cooking time (minutes)"
-                value={cookingTime}
+                placeholder='cooking time in minutes'
+                value={cookingTime || data.cookingTime}
                 style={inputStyle}
                 onChange={(e) => setCookingTime(e.target.value)}
               />
             </InputContainer>
             <InputContainer>
               <Dropdown.Button overlay={menu}>
-                {mealType || "meal type"}
+                {mealType || data.mealType || "meal type"}
               </Dropdown.Button>
             </InputContainer>
             <InputContainer>
@@ -146,7 +148,7 @@ const UpdateRecipeContent = () => {
               </Title>
               <TextArea
                 rows={11}
-                value={ingredients}
+                value={ingredients || data.ingredients}
                 style={{ ...inputStyle }}
                 onChange={(e) => setIngredients(e.target.value)}
               />
@@ -161,7 +163,7 @@ const UpdateRecipeContent = () => {
             <InputContainer>
               <TextArea
                 rows={16}
-                value={directions}
+                value={data.directions}
                 style={{ borderRadius: "1%" }}
                 onChange={(e) => setDirections(e.target.value)}
               />
@@ -172,19 +174,42 @@ const UpdateRecipeContent = () => {
           style={{ display: "flex", justifyContent: "end", padding: "10px" }}
         >
           <Button type="primary" size="large" onClick={handleSubmit}>
-            Save recipe
+            Update Recipe
           </Button>
         </div>
       </div>
     </Container>
-  );
+  ) 
+  : <></>
 };
 
 const UpdateRecipe = () => {
+
+  const location = useLocation();
+  const [recipeId, setRecipeId] = useState(location.state.recipeId);
+  const [data, setdata] = useState();
+  const user = supabase.auth.user();
+
+  const fetchRecipe = async () => {
+    let { data: recipe, error } = await supabase
+      .from("recipe")
+      .select("*")
+      .eq("userId", user.id)
+      .eq("id", recipeId);
+    if (recipe) setdata(recipe[0]);
+    if (error) console.log("an error occured", error);
+  };
+
+
+  useEffect(() => {
+    fetchRecipe();
+  });
+
+
   return (
     <Layout>
       <Container>
-        <UpdateRecipeContent />
+        <UpdateRecipeContent data={data} />
       </Container>
     </Layout>
   );

@@ -11,7 +11,6 @@ import {
 } from "antd";
 import {
   Container,
-  TitleContainer,
   ContentContainer,
   InputContainer,
   Section,
@@ -39,7 +38,7 @@ const AddRecipeContent = () => {
 
   const userId = supabase.auth.user().id;
 
-  const handleSubmit = async () => {
+  const formatRecipe = () => {
     let formattedIngredients = ingredients.replace(/[\r\n]{2,}/g, "\n");
     let ingredientsArr = [];
     formattedIngredients.split("\n").forEach((x) => {
@@ -47,7 +46,6 @@ const AddRecipeContent = () => {
         ingredientsArr.push(x.trim());
       }
     });
-
     let formattedDirections = directions.replace(/[\r\n]{2,}/g, "\n");
     let directionsArr = [];
     formattedDirections.split("\n").forEach((x) => {
@@ -55,23 +53,22 @@ const AddRecipeContent = () => {
         directionsArr.push(x.trim());
       }
     });
-
     setIngredients(ingredientsArr.join("\n"));
     setDirections(directionsArr.join("\n"));
+  };
 
-    const { data, error } = await supabase
-      .from("recipe")
-      .insert([
-        {
-          name,
-          userId,
-          serves,
-          cookingTime,
-          mealType,
-          ingredients,
-          directions,
-        },
-      ]);
+  const saveRecipe = async () => {
+    const { data, error } = await supabase.from("recipe").insert([
+      {
+        name,
+        userId,
+        serves,
+        cookingTime,
+        mealType,
+        ingredients,
+        directions,
+      },
+    ]);
     if (data) {
       message.info("Recipe saved!");
       setName("");
@@ -82,6 +79,11 @@ const AddRecipeContent = () => {
       setDirections("");
     }
     if (error) message.info("Error saving recipe");
+  };
+
+  const handleSubmit = () => {
+    formatRecipe();
+    saveRecipe();
   };
 
   const mealTypeList = ["Breakfast", "Main", "Dessert", "Snack"];

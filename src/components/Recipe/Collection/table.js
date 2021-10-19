@@ -10,6 +10,7 @@ import {
 import { matchSorter } from "match-sorter";
 import { Styles, StyledTr } from "./index.styles";
 import { blue } from "@ant-design/colors";
+import * as ROUTES from '../../../routes/constants'
 
 const Table = ({ columns, data }) => {
   console.log('data', data)
@@ -27,7 +28,7 @@ const Table = ({ columns, data }) => {
 
   const handleClick = (id) => {
     history.push({
-      pathname: "/recipe",
+      pathname: ROUTES.RECIPE,
       state: {
         recipeId: id,
       },

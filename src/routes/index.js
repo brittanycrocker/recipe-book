@@ -4,6 +4,7 @@ import Home from "../screens/Home";
 import Collection from "../components/Recipe/Collection";
 import RecipeDisplay from "../components/Recipe/RecipeDisplay";
 import AddRecipe from "../components/Recipe/AddRecipe";
+import UpdateRecipe from "../components/Recipe/UpdateRecipe";
 import Login from "../components/Auth/login";
 import Signup from "../components/Auth/signup";
 import * as ROUTES from "./constants";
@@ -29,6 +30,11 @@ export default function Routes(props) {
       <Route path={ROUTES.CREATE_RECIPE}>
         <PrivateComponent>
           <AddRecipe />
+        </PrivateComponent>
+      </Route>
+      <Route path={ROUTES.UPDATE_RECIPE}>
+        <PrivateComponent>
+          <UpdateRecipe />
         </PrivateComponent>
       </Route>
       <Route exact path={ROUTES.LOGIN}>
