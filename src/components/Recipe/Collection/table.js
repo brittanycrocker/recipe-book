@@ -12,14 +12,14 @@ import { Styles, StyledTr } from "./index.styles";
 import { blue } from "@ant-design/colors";
 
 const Table = ({ columns, data }) => {
+  console.log('data', data)
   const [search, setSearch] = useState("");
 
   const handleSearch = (event) => {
     setSearch(event.target.value);
   };
 
-  const filteredData = data.filter((item) => item.name.includes(search));
-  console.log(filteredData);
+  const filteredData = data?.filter((item) => item.name.includes(search));
 
   // TODO: add sorting filter to table
 
@@ -152,7 +152,7 @@ function GlobalFilter({
   globalFilter,
   setGlobalFilter,
 }) {
-  const count = preGlobalFilteredRows.length;
+  const count = preGlobalFilteredRows?.length;
   const [value, setValue] = useState(globalFilter);
   const onChange = useAsyncDebounce((value) => {
     setGlobalFilter(value || undefined);
@@ -180,7 +180,7 @@ function GlobalFilter({
 function DefaultColumnFilter({
   column: { filterValue, preFilteredRows, setFilter },
 }) {
-  const count = preFilteredRows.length;
+  const count = preFilteredRows?.length;
 
   return (
     <input
