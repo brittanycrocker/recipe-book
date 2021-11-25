@@ -45,7 +45,7 @@ const DirectionFields = ({
         overflow: "auto",
       }}
     >
-      {Object.values(value).map((ele, i) => {
+      {[...Array(totalNoFields)].map((ele, i) => {
         return (
           <InputContainer
             style={{
