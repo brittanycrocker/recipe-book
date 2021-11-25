@@ -22,6 +22,7 @@ const FormTemplate = ({ onFinish = () => {}, buttonLabel }) => {
       autoComplete="off"
     >
       <Form.Item
+        style={{ display: "flex" }}
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         label="Username"

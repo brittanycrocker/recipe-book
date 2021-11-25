@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { supabase } from "../../supabase";
 import { Menu, Layout, Button, Tooltip } from "antd";
-import { MailOutlined, SettingOutlined, LeftOutlined,  } from "@ant-design/icons";
+import { MailOutlined, SettingOutlined, LeftOutlined } from "@ant-design/icons";
 import * as ROUTES from "../../routes/constants";
 const { SubMenu } = Menu;
 const { Header, Content, Footer } = Layout;
@@ -24,10 +24,6 @@ const ScreenLayout = ({ children }) => {
     setUser(supabase.auth.user());
     return () => {};
   }, []);
-
-  useEffect(() => {
-    setRoute(location.pathname);
-  }, [location]);
 
   const handleClick = (e) => {
     history.push({
@@ -116,9 +112,16 @@ const ScreenLayout = ({ children }) => {
       <Content
         style={{ padding: "50px 50px", minHeight: "500px", ...contentStyle }}
       >
-        <Tooltip title="back">
-      <Button onClick={() => history.goBack()} shape="circle" icon={<LeftOutlined />} size="large" />
-    </Tooltip>
+        {location.pathname !== "/" && (
+          <Tooltip title="back">
+            <Button
+              onClick={() => history.goBack()}
+              shape="circle"
+              icon={<LeftOutlined />}
+              size="large"
+            />
+          </Tooltip>
+        )}
         <div>{children}</div>
       </Content>
       <Footer style={{ textAlign: "center" }}>

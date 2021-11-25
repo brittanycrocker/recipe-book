@@ -11,7 +11,7 @@ import { Typography, Button, Tooltip, message, Modal } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { supabase } from "../../../supabase";
 import { useHistory, useLocation } from "react-router-dom";
-import { Descriptions } from "antd";
+import { Descriptions, List } from "antd";
 import * as ROUTES from "../../../routes/constants";
 const { Title, Paragraph } = Typography;
 
@@ -70,8 +70,30 @@ const RecipeContent = ({ data, user }) => {
       .eq("userId", user.id)
       .eq("id", data.id);
     if (recipe) message.info("Recipe successfully deleted");
+    setTimeout(() => {
+      history.push({
+        pathname: ROUTES.COLLECTION,
+        state: {
+          recipeId: data.id,
+        },
+      });
+    });
     if (error) message.info("Error deleting recipe", error);
   };
+
+  function info() {
+    Modal.info({
+      title: "This is a notification message",
+      content: (
+        <div>
+          <p>Are you sure you want to delete this message?</p>
+        </div>
+      ),
+      onOk() {
+        handleDelete();
+      },
+    });
+  }
 
   const handleDelete = () => {
     deleteRecipe();
@@ -156,7 +178,28 @@ const RecipeContent = ({ data, user }) => {
             <div
               style={{ border: "1px solid white", padding: "12px", ...styles }}
             >
-              {directions}
+              <List style={{ color: "white" }}>
+                {directions &&
+                  Object.values(directions).map((ele, i) => {
+                    return (
+                      <List.Item style={{ color: "white" }}>
+                        <p>
+                          <span
+                            style={{
+                              background: "#003A8C",
+                              padding: "5px",
+                              margin: "12px",
+                              borderRadius: "2%",
+                            }}
+                          >
+                            Step {i + 1}:{" "}
+                          </span>
+                          {ele}
+                        </p>
+                      </List.Item>
+                    );
+                  })}
+              </List>
             </div>
           </InputContainer>
         </Section>
@@ -164,18 +207,5 @@ const RecipeContent = ({ data, user }) => {
     </Container>
   );
 };
-
-function info() {
-  Modal.info({
-    title: "This is a notification message",
-    content: (
-      <div>
-        <p>some messages...some messages...</p>
-        <p>some messages...some messages...</p>
-      </div>
-    ),
-    onOk() {},
-  });
-}
 
 export default Recipe;

@@ -49,6 +49,8 @@ export const TitleInput = styled.input`
 
 export const ContentContainer = styled.div`
   color: white;
+  border-radius: 2%;
+  background: #eff2f5;
   @media screen {
     min-device-width: 1200px;
   }
@@ -60,6 +62,7 @@ export const ContentContainer = styled.div`
 `;
 
 export const Section = styled.div`
+  box-shadow: 4px 4px 4px #888;
   background: RGBA(0, 58, 140, 0.8);
   border-radius: 2%;
   color: white;

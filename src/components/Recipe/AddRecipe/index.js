@@ -20,12 +20,104 @@ import {
   UserOutlined,
   DownOutlined,
   ClockCircleOutlined,
+  NumberOutlined,
+  PlusCircleOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
 import Layout from "../../Layout";
-import { Descriptions } from "antd";
+import { Descriptions, Tooltip } from "antd";
 const { Header, Content, Footer } = Layout;
 const { TextArea } = Input;
 const { Title } = Typography;
+
+const DirectionFields = ({
+  value,
+  setDirections,
+  totalNoFields,
+  setTotalNoFields,
+}) => {
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        maxHeight: "360px",
+        overflow: "auto",
+      }}
+    >
+      {Object.values(value).map((ele, i) => {
+        return (
+          <InputContainer
+            style={{
+              display: "flex",
+              flexBasis: "auto",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              padding: "2px",
+            }}
+          >
+            <NumberOutlined
+              fontSize={12}
+              style={{ fontSize: "24px", padding: "2px 12px 0 0" }}
+            />
+            <TextArea
+              key={i}
+              addonBefore={<ClockCircleOutlined />}
+              rows={1}
+              value={ele}
+              style={{ borderRadius: "1%" }}
+              onChange={(e) => {
+                setDirections({ ...value, [i]: e.target.value });
+              }}
+            />
+          </InputContainer>
+        );
+      })}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          paddingTop: "12px",
+        }}
+      >
+        <Tooltip title="add field">
+          <Button
+            onClick={() => setTotalNoFields(parseInt(totalNoFields + 1))}
+            type="primary"
+            shape="circle"
+            size={"large"}
+            style={{ margin: "6px" }}
+            icon={
+              <PlusCircleOutlined
+                fontSize={45}
+                style={{
+                  fontSize: "28px",
+                }}
+              />
+            }
+          />
+        </Tooltip>
+        <Tooltip title="remove field">
+          <Button
+            onClick={() => setTotalNoFields(parseInt(totalNoFields - 1))}
+            title="update recipe"
+            type="primary"
+            shape="circle"
+            size={"large"}
+            style={{ margin: "6px" }}
+            icon={
+              <DeleteOutlined
+                style={{
+                  fontSize: "28px",
+                }}
+              />
+            }
+          />
+        </Tooltip>
+      </div>
+    </div>
+  );
+};
 
 const AddRecipeContent = () => {
   //TODO: form validation
@@ -34,7 +126,8 @@ const AddRecipeContent = () => {
   let [ingredients, setIngredients] = useState("");
   const [cookingTime, setCookingTime] = useState("");
   const [mealType, setMealType] = useState("");
-  let [directions, setDirections] = useState("");
+  let [directions, setDirections] = useState([""]);
+  const [totalNoFields, setTotalNoFields] = useState(4);
 
   const userId = supabase.auth.user().id;
 
@@ -46,15 +139,17 @@ const AddRecipeContent = () => {
         ingredientsArr.push(x.trim());
       }
     });
-    let formattedDirections = directions.replace(/[\r\n]{2,}/g, "\n");
-    let directionsArr = [];
-    formattedDirections.split("\n").forEach((x) => {
-      if (x !== null) {
-        directionsArr.push(x.trim());
-      }
-    });
+    // let formattedDirections = Object.values(directions).map((x) => {
+    //   x.replace(/[\r\n]{2,}/g, "\n");
+    // });
+    // let directionsArr = [];
+    // formattedDirections.split("\n").forEach((x) => {
+    //   if (x !== null) {
+    //     directionsArr.push(x.trim());
+    //   }
+    // });
     setIngredients(ingredientsArr.join("\n"));
-    setDirections(directionsArr.join("\n"));
+    setDirections(directions);
   };
 
   const saveRecipe = async () => {
@@ -142,7 +237,7 @@ const AddRecipeContent = () => {
                 {mealType || "meal type"}
               </Dropdown.Button>
             </InputContainer>
-            <InputContainer>
+            <InputContainer style={{ maxHeight: "290px", overflow: "auto" }}>
               <Title level={4} style={{ color: "white" }}>
                 Ingredients List
               </Title>
@@ -160,14 +255,12 @@ const AddRecipeContent = () => {
                 Directions
               </Title>
             </InputContainer>
-            <InputContainer>
-              <TextArea
-                rows={16}
-                value={directions}
-                style={{ borderRadius: "1%" }}
-                onChange={(e) => setDirections(e.target.value)}
-              />
-            </InputContainer>
+            <DirectionFields
+              setTotalNoFields={setTotalNoFields}
+              totalNoFields={totalNoFields}
+              setDirections={setDirections}
+              value={directions}
+            />
           </Section>
         </ContentContainer>
         <div
